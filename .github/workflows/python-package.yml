@@ -33,6 +33,4 @@ jobs:
         poetry run python -m black --line-length=119 giwerm
     - name: Test with pytest
       run: |
-        poetry run python -m pytest --durations=0 --cov=
-        
-        tests
+        poetry run python -m pytest --durations=0 --cov=giwerm tests
