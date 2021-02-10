@@ -1,6 +1,8 @@
 import numpy as np
 from sklearn.model_selection import StratifiedKFold
 
+from giwerm.geometric_functions import alpha_geodesic
+
 
 class CovariateShiftAdaptation(object):
     def __init__(self):
@@ -22,3 +24,6 @@ class CovariateShiftAdaptation(object):
         q = 1 - p
 
         return (p, q)
+
+    def generalized_importance_weight(self, p, q, lmd, alpha):
+        return alpha_geodesic(p, q, lmd=lmd, alpha=alpha) / p

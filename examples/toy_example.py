@@ -6,7 +6,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import mean_squared_error
 
-from giwerm.geometric_functions import alpha_geodesic
 from giwerm.covariate_shift_adaptation import CovariateShiftAdaptation
 
 
@@ -52,7 +51,7 @@ def main():
     p, q = cvs.predict_densities(clf, data, labels,
                                  np.arange(len(test_df), len(data)))
     iw = q / p
-    gw = alpha_geodesic(p, q, lmd=0.98, alpha=4) / p
+    gw = cvs.generalized_importance_weight(p, q, lmd=0.98, alpha=4)
 
     X_train, y_train = trainset[:,0], trainset[:,1]
     X_test, y_test = testset[:,0], testset[:,1]
