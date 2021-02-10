@@ -6,10 +6,11 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import mean_squared_error
 
-from giwerm.geometric_functions import alpha_geodesic
+from giwerm.covariate_shift_adaptation import CovariateShiftAdaptation
 
 
 def main():
+    np.random.seed(100)
     n_train = 400
     n_test = 200
     x = 11 * np.random.random(n_train) - 6.0
@@ -44,22 +45,13 @@ def main():
     data = data.drop('is_train', axis=1).values
     u, v = test_df.values, train_df.values
 
+    cvs = CovariateShiftAdaptation()
+
     clf = RandomForestClassifier(max_depth=2)
-    predictions = np.zeros(labels.shape)
-    skf = StratifiedKFold(n_splits=20, shuffle=True, random_state=1234)
-    for fold, (train_idx, test_idx) in enumerate(skf.split(data, labels)):
-        print('Training discriminator model for fold {}'.format(fold))
-        X_train, X_test = data[train_idx], data[test_idx]
-        y_train, y_test = labels[train_idx], labels[test_idx]
-
-        clf.fit(X_train, y_train)
-        probs = clf.predict_proba(X_test)[:, 1]
-        predictions[test_idx] = probs
-
-    p = predictions[len(test_df):]
-    q = 1 - p
+    p, q = cvs.predict_densities(clf, data, labels,
+                                 np.arange(len(test_df), len(data)))
     iw = q / p
-    gw = alpha_geodesic(p, q, lmd=0.98, alpha=4) / p
+    gw = cvs.generalized_importance_weight(p, q, lmd=0.98, alpha=4)
 
     X_train, y_train = trainset[:,0], trainset[:,1]
     X_test, y_test = testset[:,0], testset[:,1]
