@@ -27,7 +27,6 @@ jobs:
         poetry install
     - name: Lint with flake8
       run: |
-        poetry run python -m flake8 giwerm
         poetry run python -m autoflake --in-place --remove-all-unused-imports --remove-unused-variables --recursive giwerm
         poetry run python -m isort giwerm
         poetry run python -m black --line-length=119 giwerm
