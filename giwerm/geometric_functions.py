@@ -17,4 +17,6 @@ def alpha_geodesic(a, b, lmd, alpha):
     elif alpha == 3:
         return 1 / ((1 - lmd) / a + lmd / b)
 
-    return kth_root((1 - lmd) * kth_power(a, alpha) + lmd * kth_power(b, alpha), alpha)
+    lhs = kth_power(a, alpha)
+    rhs = kth_power(b, alpha)
+    return kth_root((1 - lmd) * lhs + lmd * rhs, alpha)
