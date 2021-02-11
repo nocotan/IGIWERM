@@ -13,3 +13,5 @@ def iw_cross_validation(clf, metric, inputs, targets, sample_weight, n_splits=20
         clf.fit(X_train, y_train)
         loss = metric(clf.predict(X_test) * sample_weight, y_test * sample_weight)
         losses.append(loss)
+
+    return losses
