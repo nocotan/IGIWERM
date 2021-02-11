@@ -16,6 +16,7 @@ black = "^20.8b1"
 sklearn = "^0.0"
 matplotlib = "^3.3.4"
 pandas = "^1.2.2"
+GPyOpt = "^1.2.6"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.1"
