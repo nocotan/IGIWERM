@@ -1,5 +1,5 @@
-import numpy as np
 import GPyOpt
+import numpy as np
 from sklearn.model_selection import StratifiedKFold
 
 from giwerm.geometric_functions import alpha_geodesic
@@ -35,21 +35,19 @@ class CovariateShiftAdaptation(object):
             alpha = params[:, 1][0]
             w = self.generalized_importance_weight(p, q, lmd, alpha)
             if np.isnan(w).any() or np.isinf(w).any():
-                return 1e+9
+                return 1e9
             try:
                 clf.fit(train_x, train_y, sample_weight=w)
             except Exception:
-                return 1e+9
+                return 1e9
 
             error = metric(clf.predict(val_x), val_y)
             return error
 
-        bopt = GPyOpt.methods.BayesianOptimization(f=objective,
-                                                   domain=bounds,
-                                                   initial_design_numdata=0)
-        e_00 = objective(np.array([[0., 0.]]))
-        e_11 = objective(np.array([[1., 1.]]))
-        bopt.X = np.array([[1., 1.], [0., 0.]])
+        bopt = GPyOpt.methods.BayesianOptimization(f=objective, domain=bounds, initial_design_numdata=0)
+        e_00 = objective(np.array([[0.0, 0.0]]))
+        e_11 = objective(np.array([[1.0, 1.0]]))
+        bopt.X = np.array([[1.0, 1.0], [0.0, 0.0]])
         bopt.Y = np.array([[e_11], [e_00]])
         bopt.run_optimization(max_iter=100)
         lmd, alpha = bopt.x_opt
