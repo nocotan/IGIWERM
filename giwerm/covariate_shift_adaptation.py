@@ -8,6 +8,7 @@ from giwerm.geometric_functions import alpha_geodesic
 class CovariateShiftAdaptation(object):
     def __init__(self, bounds=None):
         self.bounds = bounds
+        self.predictions = None
 
     def predict_densities(self, clf, data, labels, target_idx):
         predictions = np.zeros(labels.shape)
@@ -21,6 +22,7 @@ class CovariateShiftAdaptation(object):
             probs = clf.predict_proba(X_test)[:, 1]
             predictions[test_idx] = probs
 
+        self.predictions = predictions
         p = predictions[target_idx]
         q = 1 - p
 
