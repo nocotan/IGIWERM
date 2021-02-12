@@ -73,6 +73,8 @@ def main():
     Alpha = np.arange(1, 4.1, 0.3)
     D = grid_search(x, y, Lambda, Alpha)
 
+    X, Y= np.meshgrid(Lambda, Alpha)
+
     fig = plt.figure(figsize=(12,8))
     ax = Axes3D(fig)
     ax.view_init(30, 40)
